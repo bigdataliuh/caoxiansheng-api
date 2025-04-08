@@ -4,7 +4,7 @@ import requests
 import os
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+CORS(app)
 
 # 从环境变量中获取 API Key 和 应用 ID
 API_KEY = os.getenv("API_KEY")
