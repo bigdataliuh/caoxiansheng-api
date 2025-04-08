@@ -4,7 +4,7 @@ import requests
 import os
 
 app = Flask(__name__)
-CORS(app)  # ✅ 允许所有前端跨域访问该服务
+CORS(app, supports_credentials=True)
 
 # 从环境变量中获取 API Key 和 应用 ID
 API_KEY = os.getenv("API_KEY")
