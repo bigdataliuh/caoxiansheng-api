@@ -5,8 +5,11 @@ import json
 import os
 
 app = Flask(__name__)
-CORS(app, resources={r"/ask": {"origins": "https://lambent-froyo-cb1103.netlify.app"}})
 
+# ✅ 开放跨域（上线前可指定前端地址）
+CORS(app, origins="*", supports_credentials=True)
+
+# ✅ 固定配置
 API_KEY = "application-d1c45598abb5d6f3a859031fa595d950"
 FIXED_CHAT_ID = "a2b766a6-24d7-11f0-bb3e-0242ac110002"
 HEADERS = {
@@ -41,6 +44,4 @@ def ask():
 
     return Response(generate(), content_type="text/event-stream")
 
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+# ✅ 注意：不需要 app.run()，由 gunicorn 启动
