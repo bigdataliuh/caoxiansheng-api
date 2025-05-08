@@ -34,7 +34,13 @@ def ask():
         response.raise_for_status()
         result = response.json()
         content = result.get("data", {}).get("content", "（无返回内容）")
-        return jsonify({"content": content})
+
+        # 包装随机生成的问题
+        random_question1 = "贾宝玉的性格特点是什么？"
+        random_question2 = "林黛玉与薛宝钗的性格差异体现在哪些方面？"
+        content_with_questions = f"{content}\n\n<quick_question>{random_question1}</quick_question>\n<quick_question>{random_question2}</quick_question>"
+
+        return jsonify({"content": content_with_questions})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
