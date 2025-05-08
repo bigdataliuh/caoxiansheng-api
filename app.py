@@ -35,8 +35,6 @@ def ask():
         result = response.json()
         content = result.get("data", {}).get("content", "（无返回内容）")
 
-        # 假设 MaxKB 的接口返回的内容中已经包含动态生成的 <quick_question> 标签
-        # 这里不需要再写死问题，直接返回 content
         return jsonify({"content": content})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
