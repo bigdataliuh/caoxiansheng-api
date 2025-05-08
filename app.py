@@ -35,14 +35,9 @@ def ask():
         result = response.json()
         content = result.get("data", {}).get("content", "（无返回内容）")
 
-        # 假设这里获取到的随机问题是动态生成的
-        random_question1 = "贾宝玉的性格特点是什么？"
-        random_question2 = "林黛玉与薛宝钗的性格差异体现在哪些方面？"
-        
-        # 将随机问题包裹在 <quick_question> 标签中
-        content_with_questions = f"{content}\n\n<quick_question>{random_question1}</quick_question>\n<quick_question>{random_question2}</quick_question>"
-
-        return jsonify({"content": content_with_questions})
+        # 假设 MaxKB 的接口返回的内容中已经包含动态生成的 <quick_question> 标签
+        # 这里不需要再写死问题，直接返回 content
+        return jsonify({"content": content})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
