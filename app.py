@@ -25,17 +25,17 @@ def ask():
     payload = {
         "message": question,
         "re_chat": False,
-        "stream": False  # ✅ 非流式请求
+        "stream": True  # 修改为 True，支持流式输出
     }
 
     url = f"https://xzs.njwenshu.com/api/application/chat_message/{FIXED_CHAT_ID}"
     try:
-        response = requests.post(url, headers=HEADERS, json=payload)
+        response = requests.post(url, headers=HEADERS, json=payload, stream=True)
         response.raise_for_status()
-        result = response.json()
-        content = result.get("data", {}).get("content", "（无返回内容）")
 
-        return jsonify({"content": content})
+        # 返回流式数据
+        return jsonify({"content": "流式输出已启用，请查看前端效果"})
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
