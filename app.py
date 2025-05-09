@@ -15,11 +15,8 @@ HEADERS = {
     "Content-Type": "application/json"
 }
 
-@app.route("/ask", methods=["POST", "OPTIONS"])
+@app.route("/ask", methods=["POST"])
 def ask():
-    if request.method == "OPTIONS":
-        return jsonify({"message": "CORS pre-flight request handled"}), 200
-
     data = request.get_json()
     question = data.get("question")
     if not question:
@@ -28,21 +25,17 @@ def ask():
     payload = {
         "message": question,
         "re_chat": False,
-        "stream": True  # 启用流式输出
+        "stream": False  # ✅ 非流式请求
     }
 
-    url = f"https://xzs.njwenshu.com/api/application/chat_message/{FIXED_CHAT_ID}"
+    url = f"https://xzs.njwenshu.com/api/application/chat_message/ {FIXED_CHAT_ID}"
     try:
-        response = requests.post(url, headers=HEADERS, json=payload, stream=True)
+        response = requests.post(url, headers=HEADERS, json=payload)
         response.raise_for_status()
+        result = response.json()
+        content = result.get("data", {}).get("content", "（无返回内容）")
 
-        def generate():
-            for chunk in response.iter_content(chunk_size=1024):
-                if chunk:
-                    yield chunk.decode('utf-8')
-        
-        return app.response_class(generate(), content_type='application/json')
-
+        return jsonify({"content": content})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
