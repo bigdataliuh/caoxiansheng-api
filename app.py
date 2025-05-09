@@ -28,7 +28,7 @@ def ask():
         "stream": False  # ✅ 非流式请求
     }
 
-    url = f"https://xzs.njwenshu.com/api/application/chat_message/ {FIXED_CHAT_ID}"
+    url = f"https://xzs.njwenshu.com/api/application/chat_message/{FIXED_CHAT_ID}"
     try:
         response = requests.post(url, headers=HEADERS, json=payload)
         response.raise_for_status()
