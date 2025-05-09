@@ -15,8 +15,11 @@ HEADERS = {
     "Content-Type": "application/json"
 }
 
-@app.route("/ask", methods=["POST"])
+@app.route("/ask", methods=["POST", "OPTIONS"])
 def ask():
+    if request.method == "OPTIONS":
+        return jsonify({"message": "CORS pre-flight request handled"}), 200
+
     data = request.get_json()
     question = data.get("question")
     if not question:
