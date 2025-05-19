@@ -11,7 +11,7 @@ APPLICATION_ID = "007d316a-0897-11f0-bc52-0242ac110002"
 FIXED_CHAT_ID = "a2b766a6-24d7-11f0-bb3e-0242ac110002"
 
 HEADERS = {
-    "Authorization": API_KEY,
+    "Authorization": API_KEY, 
     "Content-Type": "application/json"
 }
 
