@@ -4,7 +4,7 @@ import requests
 import os
 
 app = Flask(__name__)
-CORS(app)
+CORS(app) 
 
 API_KEY = "application-d1c45598abb5d6f3a859031fa595d950"
 APPLICATION_ID = "007d316a-0897-11f0-bc52-0242ac110002"
