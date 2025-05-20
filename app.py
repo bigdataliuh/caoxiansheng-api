@@ -1,17 +1,17 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
 import requests
 import os
 
 app = Flask(__name__)
-CORS(app) 
+CORS(app)
 
 API_KEY = "application-d1c45598abb5d6f3a859031fa595d950"
 APPLICATION_ID = "007d316a-0897-11f0-bc52-0242ac110002"
 FIXED_CHAT_ID = "a2b766a6-24d7-11f0-bb3e-0242ac110002"
 
 HEADERS = {
-    "Authorization": API_KEY, 
+    "Authorization": API_KEY,
     "Content-Type": "application/json"
 }
 
@@ -25,17 +25,21 @@ def ask():
     payload = {
         "message": question,
         "re_chat": False,
-        "stream": False  # ✅ 非流式请求
+        "stream": True  # 修改为流式请求
     }
 
     url = f"https://xzs.njwenshu.com/api/application/chat_message/{FIXED_CHAT_ID}"
     try:
-        response = requests.post(url, headers=HEADERS, json=payload)
+        response = requests.post(url, headers=HEADERS, json=payload, stream=True)
         response.raise_for_status()
-        result = response.json()
-        content = result.get("data", {}).get("content", "（无返回内容）")
 
-        return jsonify({"content": content})
+        def generate():
+            for line in response.iter_lines():
+                if line:
+                    decoded_line = line.decode("utf-8")
+                    yield f"data: {decoded_line}\n\n"
+
+        return Response(generate(), mimetype="text/event-stream")
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
